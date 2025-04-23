@@ -1,6 +1,9 @@
 package io.github.sunjoo_kim.board.controller;
 
+import io.github.sunjoo_kim.board.dto.CreateBoardRequest;
+import io.github.sunjoo_kim.board.dto.CreateBoardResponse;
 import io.github.sunjoo_kim.board.entity.Board;
+
 import io.github.sunjoo_kim.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +18,21 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping
-    public ResponseEntity<Board> createBoard(@RequestBody Board board) {
-        return ResponseEntity.ok(boardService.createBoard(board));
-    }
+    public ResponseEntity<CreateBoardResponse> createBoard(@RequestBody CreateBoardRequest request) {
+        Board board = new Board();
+        board.setTitle(request.getTitle());
+        board.setContent(request.getContent());
+        board.setWriter(request.getWriter());
 
+        Board created = boardService.createBoard(board);
+        CreateBoardResponse response = new CreateBoardResponse(
+                created.getId(),
+                created.getTitle(),
+                created.getWriter()
+        );
+
+        return ResponseEntity.ok(response);
+    }
     @GetMapping("/{id}")
     public ResponseEntity<Board> getBoardById(@PathVariable Long id) {
         return ResponseEntity.ok(boardService.getBoardById(id));
