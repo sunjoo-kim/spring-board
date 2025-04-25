@@ -6,7 +6,10 @@ import io.github.sunjoo_kim.board.dto.CreateBoardResponse;
 import io.github.sunjoo_kim.board.dto.UpdateBoardRequest;
 import io.github.sunjoo_kim.board.entity.Board;
 
-import io.github.sunjoo_kim.board.service.BoardService;
+import io.github.sunjoo_kim.board.service.CreateBoardService;
+import io.github.sunjoo_kim.board.service.DeleteBoardService;
+import io.github.sunjoo_kim.board.service.GetBoardService;
+import io.github.sunjoo_kim.board.service.UpdateBoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +20,10 @@ import java.util.List;
 @RequestMapping("/api/boards")
 @RequiredArgsConstructor
 public class BoardController {
-    private final BoardService boardService;
+    private final GetBoardService getBoardService;
+    private final CreateBoardService createBoardService;
+    private final DeleteBoardService deleteBoardService;
+    private final UpdateBoardService updateBoardService;
 
     @PostMapping
     public ResponseEntity<CreateBoardResponse> createBoard(@RequestBody CreateBoardRequest request) {
@@ -26,7 +32,7 @@ public class BoardController {
         board.setContent(request.getContent());
         board.setWriter(request.getWriter());
 
-        Board created = boardService.createBoard(board);
+        Board created = createBoardService.createBoard(board);
         CreateBoardResponse response = new CreateBoardResponse(
                 created.getId(),
                 created.getTitle(),
@@ -38,13 +44,13 @@ public class BoardController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BoardResponse> getBoardById(@PathVariable Long id) {
-        Board board = boardService.getBoardById(id);
+        Board board = getBoardService.getBoardById(id);
         return ResponseEntity.ok(convertToResponse(board));
     }
 
     @GetMapping
     public ResponseEntity<List<BoardResponse>> getAllBoards() {
-        List<Board> boards = boardService.getAllBoards();
+        List<Board> boards = getBoardService.getAllBoards();
         List<BoardResponse> responses = boards.stream()
                 .map(this::convertToResponse)
                 .toList();
@@ -56,13 +62,13 @@ public class BoardController {
             @PathVariable Long id,
             @RequestBody UpdateBoardRequest request
     ) {
-        Board updated = boardService.updateBoard(id, request);
+        Board updated = updateBoardService.updateBoard(id, request);
         return ResponseEntity.ok(convertToResponse(updated));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBoard(@PathVariable Long id) {
-        boardService.deleteBoard(id);
+        deleteBoardService.deleteBoard(id);
         return ResponseEntity.ok().build();
     }
 
