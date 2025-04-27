@@ -17,17 +17,6 @@ resource "docker_image" "mariadb" {
   name = "mariadb:latest"
 }
 
-resource "local_file" "init_sql" {
-  filename = "${path.module}/init.sql"
-  content  = <<-EOT
-    -- 초기화 SQL 예시
-    CREATE TABLE IF NOT EXISTS sample_table (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      name VARCHAR(255) NOT NULL
-    );
-  EOT
-}
-
 resource "docker_container" "mariadb" {
   name  = "mariadb-container"
   image = docker_image.mariadb.name
@@ -52,6 +41,4 @@ resource "docker_container" "mariadb" {
     container_path = "/docker-entrypoint-initdb.d/init.sql"
     read_only      = true
   }
-
-  depends_on = [local_file.init_sql]
 }
