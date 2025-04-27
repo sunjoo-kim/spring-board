@@ -1,23 +1,19 @@
 package io.github.sunjoo_kim.board.controller;
 
-import io.github.sunjoo_kim.board.dto.BoardResponse;
-import io.github.sunjoo_kim.board.dto.CreateBoardRequest;
-import io.github.sunjoo_kim.board.dto.CreateBoardResponse;
-import io.github.sunjoo_kim.board.dto.UpdateBoardRequest;
+import io.github.sunjoo_kim.board.dto.*;
 import io.github.sunjoo_kim.board.entity.Board;
 
 import io.github.sunjoo_kim.board.entity.User;
 import io.github.sunjoo_kim.board.repository.UserRepository;
-import io.github.sunjoo_kim.board.service.CreateBoardService;
-import io.github.sunjoo_kim.board.service.DeleteBoardService;
-import io.github.sunjoo_kim.board.service.GetBoardService;
-import io.github.sunjoo_kim.board.service.UpdateBoardService;
+import io.github.sunjoo_kim.board.service.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/boards")
@@ -27,6 +23,7 @@ public class BoardController {
     private final CreateBoardService createBoardService;
     private final DeleteBoardService deleteBoardService;
     private final UpdateBoardService updateBoardService;
+    private final ViewEndService viewEndService;
     private final UserRepository userRepository;
 
     @PostMapping
@@ -49,9 +46,11 @@ public class BoardController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<BoardResponse> getBoardById(@PathVariable Long id) {
-        Board board = getBoardService.getBoardById(id);
+    @PostMapping("/detail")
+    public ResponseEntity<BoardResponse> getBoardById(@RequestBody GetBoardRequest request) {
+        Long id = request.getId();
+        Long userId = request.getUserId();
+        Board board = getBoardService.getBoardById(id,userId);
         return ResponseEntity.ok(convertToResponse(board));
     }
 
@@ -89,5 +88,15 @@ public class BoardController {
                 board.getCreatedAt(),
                 board.getUpdatedAt()
         );
+    }
+
+    @PostMapping("/view-end")
+    public Map<String, Object> viewEnd(@RequestBody BoardViewEndRequest request) {
+
+        viewEndService.viewEnd(request.getId(), request.getUserId());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("result", "View end processed");
+        return response;
     }
 }

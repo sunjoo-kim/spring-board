@@ -1,3 +1,8 @@
 #!/bin/bash
 
-curl -X GET http://localhost:8080/api/boards/2
+curl -X POST "http://localhost:8080/api/boards/detail" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "id": "2",
+           "userId": "2"
+         }'
