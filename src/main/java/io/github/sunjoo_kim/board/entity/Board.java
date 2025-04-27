@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "boards")
 @Getter
 @Setter
 public class Board {
@@ -15,15 +16,21 @@ public class Board {
 
     private String title;
     private String content;
-    private String author;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", unique = true)
+    private User author;
 
     @Column(updatable = false)
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    private Long viewCount;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+        viewCount = 0L;
     }
 
     @PreUpdate

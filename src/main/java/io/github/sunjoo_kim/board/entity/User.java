@@ -15,12 +15,13 @@ public class User {
 
     @Column(unique = true)
     private String username;
-
     private String password;
 
     @Column(unique = true)
     private String email;
 
+    protected User() {
+    }
     public User(String username, String email, String encode) {
     }
 }
