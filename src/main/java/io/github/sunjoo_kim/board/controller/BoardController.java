@@ -6,10 +6,13 @@ import io.github.sunjoo_kim.board.dto.CreateBoardResponse;
 import io.github.sunjoo_kim.board.dto.UpdateBoardRequest;
 import io.github.sunjoo_kim.board.entity.Board;
 
+import io.github.sunjoo_kim.board.entity.User;
+import io.github.sunjoo_kim.board.repository.UserRepository;
 import io.github.sunjoo_kim.board.service.CreateBoardService;
 import io.github.sunjoo_kim.board.service.DeleteBoardService;
 import io.github.sunjoo_kim.board.service.GetBoardService;
 import io.github.sunjoo_kim.board.service.UpdateBoardService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,19 +27,23 @@ public class BoardController {
     private final CreateBoardService createBoardService;
     private final DeleteBoardService deleteBoardService;
     private final UpdateBoardService updateBoardService;
+    private final UserRepository userRepository;
 
     @PostMapping
     public ResponseEntity<CreateBoardResponse> createBoard(@RequestBody CreateBoardRequest request) {
+        User author = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
         Board board = new Board();
         board.setTitle(request.getTitle());
         board.setContent(request.getContent());
-        board.setWriter(request.getWriter());
+        board.setAuthor(author);
 
         Board created = createBoardService.createBoard(board);
         CreateBoardResponse response = new CreateBoardResponse(
                 created.getId(),
                 created.getTitle(),
-                created.getWriter()
+                created.getAuthor().getUsername()
         );
 
         return ResponseEntity.ok(response);
@@ -77,7 +84,8 @@ public class BoardController {
                 board.getId(),
                 board.getTitle(),
                 board.getContent(),
-                board.getWriter(),
+                board.getAuthor().getUsername(),
+                board.getViewCount(),
                 board.getCreatedAt(),
                 board.getUpdatedAt()
         );
