@@ -1,6 +1,5 @@
 package io.github.sunjoo_kim.board.dto;
 
-import io.github.sunjoo_kim.board.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,5 +8,5 @@ import lombok.Setter;
 public class CreateBoardRequest {
     private String title;
     private String content;
-    private Long userId;
+    private String writer;
 }
