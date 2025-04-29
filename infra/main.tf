@@ -9,17 +9,17 @@ terraform {
 
 provider "docker" {}
 
-resource "docker_volume" "mariadb_data" {
-  name = "mariadb_data"
+resource "docker_volume" "mysql_data" {
+  name = "mysql_data"
 }
 
-resource "docker_image" "mariadb" {
-  name = "mariadb:latest"
+resource "docker_image" "mysql" {
+  name = "mysql:latest"
 }
 
-resource "docker_container" "mariadb" {
-  name  = "mariadb-container"
-  image = docker_image.mariadb.name
+resource "docker_container" "mysql" {
+  name  = "mysql-container"
+  image = docker_image.mysql.name
 
   ports {
     internal = 3306
@@ -32,7 +32,7 @@ resource "docker_container" "mariadb" {
   ]
 
   volumes {
-    volume_name    = docker_volume.mariadb_data.name
+    volume_name    = docker_volume.mysql_data.name
     container_path = "/var/lib/mysql"
   }
 
