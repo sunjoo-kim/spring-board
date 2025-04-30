@@ -11,9 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/boards")
@@ -48,9 +46,8 @@ public class BoardController {
 
     @PostMapping("/detail")
     public ResponseEntity<BoardResponse> getBoardById(@RequestBody GetBoardRequest request) {
-        Long id = request.getId();
-        Long userId = request.getUserId();
-        Board board = getBoardService.getBoardById(id,userId);
+        Board board = getBoardService.getBoardById(request.getId(),request.getUserId());
+        getBoardService.publishViewCountIncrementEvent(request.getId(), request.getUserId());
         return ResponseEntity.ok(convertToResponse(board));
     }
 
@@ -91,12 +88,8 @@ public class BoardController {
     }
 
     @PostMapping("/view-end")
-    public Map<String, Object> viewEnd(@RequestBody BoardViewEndRequest request) {
-
-        viewEndService.viewEnd(request.getId(), request.getUserId());
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("result", "View end processed");
-        return response;
+    public ResponseEntity<Void> viewEnd(@RequestBody BoardViewEndRequest request) {
+        viewEndService.publishViewEndTimeEvent(request.getId(), request.getUserId());
+        return ResponseEntity.ok().build();
     }
 }

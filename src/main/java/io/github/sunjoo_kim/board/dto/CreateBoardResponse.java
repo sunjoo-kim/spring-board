@@ -1,6 +1,5 @@
 package io.github.sunjoo_kim.board.dto;
 
-import io.github.sunjoo_kim.board.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

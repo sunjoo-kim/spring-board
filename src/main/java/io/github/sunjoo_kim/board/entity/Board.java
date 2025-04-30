@@ -25,6 +25,7 @@ public class Board {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    @JoinColumn(name = "view_count")
     private Long viewCount;
 
     @PrePersist
