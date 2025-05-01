@@ -27,7 +27,8 @@ VALUES
     ('jane_smith', 'password456', 'jane.smith@example.com');
 
 -- Board 테이블에 테스트 데이터 추가
-INSERT INTO boards (title, content, author_id)
+INSERT INTO boards (title, content, author_id, created_at, updated_at,view_count)
 VALUES
-    ('첫 번째 게시물', '첫 번째 게시물 내용입니다.', 1),
-    ('두 번째 게시물', '두 번째 게시물 내용입니다.', 2);
+    ('첫 번째 게시물', '첫 번째 게시물 내용입니다.', 1,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    ('두 번째 게시물', '두 번째 게시물 내용입니다.', 2,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);
+
