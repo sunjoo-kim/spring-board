@@ -18,4 +18,13 @@ public class BoardViewEventListener {
         log.info("게시글 조회 시작 이벤트 발생: postId={}, userId={}, startTime={}", postId, userId,startTime);
         // TODO: 메트릭 시스템에 이벤트 전송 또는 로깅
     }
+
+    @EventListener
+    public void handleBoardViewEndEvent(BoardViewEndEvent event) {
+        Long postId = event.getBoardId();
+        Long userId = event.getUserId();
+        Instant startTime = event.getEndTime();
+        log.info("게시글 조회 종료 이벤트 발생: postId={}, userId={}, startTime={}", postId, userId,startTime);
+        // TODO: 메트릭 시스템에 이벤트 전송 또는 로깅
+    }
 }

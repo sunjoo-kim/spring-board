@@ -8,5 +8,4 @@ import lombok.Setter;
 public class BoardViewEndRequest {
     private Long id;
     private Long userId;
-    private String time;
 }
