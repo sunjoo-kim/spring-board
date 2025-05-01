@@ -8,6 +8,7 @@ import io.github.sunjoo_kim.board.repository.UserRepository;
 import io.github.sunjoo_kim.board.service.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/boards")
 @RequiredArgsConstructor
+@Slf4j
 public class BoardController {
     private final GetBoardService getBoardService;
     private final CreateBoardService createBoardService;
@@ -89,6 +91,7 @@ public class BoardController {
 
     @PostMapping("/view-end")
     public ResponseEntity<Void> viewEnd(@RequestBody BoardViewEndRequest request) {
+        log.warn("게시글 조회 종료 요청: boardId={}, userId={}", request.getId(), request.getUserId());
         viewEndService.publishViewEndTimeEvent(request.getId(), request.getUserId());
         return ResponseEntity.ok().build();
     }

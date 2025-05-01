@@ -42,3 +42,27 @@ resource "docker_container" "mysql" {
     read_only      = true
   }
 }
+
+# Redis 설정
+resource "docker_volume" "redis_data" {
+  name = "redis_data"
+}
+
+resource "docker_image" "redis" {
+  name = "redis:latest"
+}
+
+resource "docker_container" "redis" {
+  name  = "redis-container"
+  image = docker_image.redis.name
+
+  ports {
+    internal = 6379
+    external = 6379
+  }
+
+  volumes {
+    volume_name    = docker_volume.redis_data.name
+    container_path = "/data"
+  }
+}
