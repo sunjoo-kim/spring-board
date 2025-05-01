@@ -14,7 +14,6 @@ public class ViewCountIncrementListener {
 
     private final BoardRepository boardRepository;
 
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT )
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handleViewCountIncrement(BoardViewCountEvent event) {
         System.out.println("Event  started for boardId: " + event.getBoardId());
