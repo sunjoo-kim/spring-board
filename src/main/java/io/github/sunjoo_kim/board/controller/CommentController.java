@@ -9,6 +9,7 @@ import io.github.sunjoo_kim.board.repository.BoardRepository;
 import io.github.sunjoo_kim.board.repository.CommentRepository;
 import io.github.sunjoo_kim.board.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +28,8 @@ public class CommentController {
     private final UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<Void> createComment(@RequestBody CreateCommentRequest request) {
+    public ResponseEntity<Void> createComment(@Valid @RequestBody CreateCommentRequest request) {
+
         // Validate and fetch the board
         Board board = boardRepository.findById(request.getBoardId())
                 .orElseThrow(() -> new EntityNotFoundException("Board not found"));
