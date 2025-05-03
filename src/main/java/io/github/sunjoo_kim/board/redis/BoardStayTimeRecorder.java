@@ -1,7 +1,9 @@
 package io.github.sunjoo_kim.board.redis;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -44,7 +46,7 @@ public class BoardStayTimeRecorder {
                 String boardId = parts[0];
 
                 // (2) 이 게시글 체류시간에서 적당량 차감 (대략적인 값, or 기록 따로 저장하면 정확 가능)
-                // 여기서는 예시로 그냥 고정 차감 (실제는 staySeconds 기록 필요)
+                // 여기서는 예시로 그냥 고정 차감 (staySeconds 기록 필요)
 
                 redisTemplate.opsForZSet().incrementScore(sumKey, boardId, -30); // 30초 감소 예시
 
