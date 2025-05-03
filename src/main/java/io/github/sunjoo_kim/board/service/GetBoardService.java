@@ -8,7 +8,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
@@ -29,6 +28,7 @@ public class GetBoardService {
     }
     @Transactional
     public void publishViewCountIncrementEvent(Long boardId, Long userId) {
+        System.out.println("publishViewCountIncrementEvent started for boardId: " + boardId);
         eventPublisher.publishEvent(new BoardViewCountEvent(boardId, userId, Instant.now()));
     }
     public List<Board> getAllBoards() {
