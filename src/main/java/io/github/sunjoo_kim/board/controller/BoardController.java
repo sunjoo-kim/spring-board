@@ -79,13 +79,9 @@ public class BoardController {
 
     private BoardResponse convertToResponse(Board board) {
         return new BoardResponse(
-                board.getId(),
                 board.getTitle(),
-                board.getContent(),
                 board.getAuthor().getUsername(),
-                board.getViewCount(),
-                board.getCreatedAt(),
-                board.getUpdatedAt()
+                board.getViewCount()
         );
     }
 
