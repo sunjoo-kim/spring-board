@@ -15,7 +15,7 @@ public class ViewEndService {
     private final ApplicationEventPublisher eventPublisher;
 
     public void publishViewEndTimeEvent(Long id, Long userId) {
-        log.warn("게시글 조회 종료 이벤트 발행: boardId={}, userId={}", id, userId);
+        log.debug("게시글 조회 종료 이벤트 발행: boardId={}, userId={}", id, userId);
         eventPublisher.publishEvent(new BoardViewEndEvent(id, userId, Instant.now()));
     }
 

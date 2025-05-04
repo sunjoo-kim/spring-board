@@ -6,6 +6,7 @@ import io.github.sunjoo_kim.board.event.BoardViewStartedEvent;
 import io.github.sunjoo_kim.board.repository.BoardRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class GetBoardService {
 
     private final BoardRepository boardRepository;
@@ -28,7 +30,7 @@ public class GetBoardService {
     }
     @Transactional
     public void publishViewCountIncrementEvent(Long boardId, Long userId) {
-        System.out.println("publishViewCountIncrementEvent started for boardId: " + boardId);
+        log.debug("publishViewCountIncrementEvent started for boardId: " + boardId);
         eventPublisher.publishEvent(new BoardViewCountEvent(boardId, userId, Instant.now()));
     }
     public List<Board> getAllBoards() {
