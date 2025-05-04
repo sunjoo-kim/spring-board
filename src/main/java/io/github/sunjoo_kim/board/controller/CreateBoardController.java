@@ -9,6 +9,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,25 +18,14 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class CreateBoardController {
     private final CreateBoardService createBoardService;
-    private final UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<CreateBoardResponse> createBoard(@RequestBody CreateBoardRequest request) {
-        User author = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
-        Board board = new Board();
-        board.setTitle(request.getTitle());
-        board.setContent(request.getContent());
-        board.setAuthor(author);
-
-        Board created = createBoardService.createBoard(board);
-        CreateBoardResponse response = new CreateBoardResponse(
-                created.getId(),
-                created.getTitle(),
-                created.getAuthor().getUsername()
+    public ResponseEntity<Board> createBoard(@Validated @RequestBody CreateBoardRequest request) {
+        Board board = createBoardService.createBoard(
+                request.getTitle(),
+                request.getContent(),
+                request.getUserId()
         );
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(board);
     }
 }
