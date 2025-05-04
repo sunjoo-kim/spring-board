@@ -24,15 +24,14 @@ public class GetBoardService {
 
     @Transactional(readOnly = true)
     public Board getBoardById(Long id, Long userId) {
-        eventPublisher.publishEvent(new BoardViewStartedEvent(id, userId, Instant.now()));
-        return boardRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Board not found"));
+        final Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Board with id " + id + " not found"));
+        Instant now = Instant.now();
+        eventPublisher.publishEvent(new BoardViewStartedEvent(id, userId, now));
+        eventPublisher.publishEvent(new BoardViewCountEvent(id, userId, now));
+        return board;
     }
-    @Transactional
-    public void publishViewCountIncrementEvent(Long boardId, Long userId) {
-        log.debug("publishViewCountIncrementEvent started for boardId: " + boardId);
-        eventPublisher.publishEvent(new BoardViewCountEvent(boardId, userId, Instant.now()));
-    }
+    @Transactional(readOnly = true)
     public List<Board> getAllBoards() {
         return boardRepository.findAll();
     }
