@@ -15,6 +15,8 @@ public class Board {
     private Long id;
 
     private String title;
+
+    @Lob // Large Object
     private String content;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -40,5 +42,18 @@ public class Board {
     }
 
     public void update(String title, String content) {
+    }
+
+    // Builder method to encapsulate creation logic
+    public static Board create(String title, String content, Long userId) {
+        Board board = new Board();
+        board.title = title;
+        board.content = content;
+        board.author = new User();
+        board.author.setId(userId);
+        board.createdAt = LocalDateTime.now();
+        board.updatedAt = LocalDateTime.now();
+        board.viewCount = 0L; // Initialize view count
+        return board;
     }
 }
