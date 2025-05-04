@@ -87,7 +87,7 @@ public class BoardController {
 
     @PostMapping("/view-end")
     public ResponseEntity<Void> viewEnd(@RequestBody BoardViewEndRequest request) {
-        log.warn("게시글 조회 종료 요청: boardId={}, userId={}", request.getId(), request.getUserId());
+        log.debug("게시글 조회 종료 요청: boardId={}, userId={}", request.getId(), request.getUserId());
         viewEndService.publishViewEndTimeEvent(request.getId(), request.getUserId());
         return ResponseEntity.ok().build();
     }

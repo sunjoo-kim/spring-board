@@ -38,4 +38,7 @@ public class Board {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+    public void update(String title, String content) {
+    }
 }

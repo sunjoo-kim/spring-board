@@ -19,8 +19,7 @@ public class UpdateBoardService {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Board not found"));
 
-        board.setTitle(request.getTitle());
-        board.setContent(request.getContent());
+        board.update(request.getTitle(), request.getContent());
         return boardRepository.save(board);
     }
 

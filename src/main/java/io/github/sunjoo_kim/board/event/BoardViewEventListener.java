@@ -32,7 +32,7 @@ public class BoardViewEventListener {
         Long userId = event.getUserId();
         String key = "board:view:start:" + boardId + ":" + userId;
         String value = redisTemplate.opsForValue().get(key);
-        log.warn("게시글 조회 종료 이벤트 수신: boardId={}, userId={}", boardId, userId);
+        log.debug("게시글 조회 종료 이벤트 수신: boardId={}, userId={}", boardId, userId);
 
         if (value != null) {
             // Redis에 저장된 시간 (초 단위 Unix timestamp)
@@ -44,7 +44,7 @@ public class BoardViewEventListener {
 
             boardStayTimeRecorder.recordStay(boardId, userId, durationInSeconds);
 
-            log.info("게시글 조회 체류 시간 기록: boardId={}, userId={}, durationInSeconds={}", boardId, userId, durationInSeconds);
+            log.debug("게시글 조회 체류 시간 기록: boardId={}, userId={}, durationInSeconds={}", boardId, userId, durationInSeconds);
         } else {
             log.warn("Redis에 저장된 조회 시작 시간이 없습니다. boardId={}, userId={}", boardId, userId);
         }
