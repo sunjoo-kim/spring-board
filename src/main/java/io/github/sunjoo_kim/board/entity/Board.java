@@ -56,4 +56,8 @@ public class Board {
         board.viewCount = 0L; // Initialize view count
         return board;
     }
+
+    public long calculateScore(long viewsLast12Hours, long viewsLast1Hour) {
+        return viewCount + 2 * viewsLast12Hours + 3 * viewsLast1Hour;
+    }
 }
