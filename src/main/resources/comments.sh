@@ -1,19 +1,31 @@
 #!/bin/bash
 
-# Define the API endpoint
-API_URL="http://localhost:8080/api/comments"
+# Define API endpoint variables
+BASE_URL="http://localhost:8080/api/boards"
+BOARD_ID=1
+API_URL="$BASE_URL/$BOARD_ID/comments"
 
-# Define the JSON payload
+# Define the JSON payload variables
+USER_ID=2
+CONTENT="This is a sample comment"
+
+# Construct JSON payload
 JSON_PAYLOAD=$(cat <<EOF
 {
-  "boardId": 1,
-  "userId": 1,
-  "content": "This is a sample comment"
+  "userId": $USER_ID,
+  "content": "$CONTENT"
 }
 EOF
 )
 
 # Make the POST request
-curl -X POST "$API_URL" \
+RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$API_URL" \
      -H "Content-Type: application/json" \
-     -d "$JSON_PAYLOAD"
+     -d "$JSON_PAYLOAD")
+
+# Check the response status
+if [ "$RESPONSE" -eq 201 ]; then
+  echo "Comment created successfully."
+else
+  echo "Failed to create comment. HTTP Status Code: $RESPONSE"
+fi

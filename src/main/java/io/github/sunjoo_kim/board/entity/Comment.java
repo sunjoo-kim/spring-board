@@ -1,6 +1,8 @@
 package io.github.sunjoo_kim.board.entity;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -9,6 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "comments")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,5 +47,21 @@ public class Comment {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
+    }
+
+    @Builder
+    public Comment(Board board, User author, String content) {
+        this.board = board;
+        this.author = author;
+        this.content = content;
+    }
+
+    // 정적 메서드를 통한 빌더 생성 (Board ID, User ID)
+    public static Comment createWithIds(Long boardId, Long userId, String content) {
+        return Comment.builder()
+                .board(Board.builder().id(boardId).build())
+                .author(User.builder().id(userId).build())
+                .content(content)
+                .build();
     }
 }
