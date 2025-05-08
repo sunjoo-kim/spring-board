@@ -15,10 +15,10 @@ public class CommentController {
     private final CreateCommentService createCommentService;
 
     @PostMapping
-    public ResponseEntity<Comment> createComment(
+    public ResponseEntity<Void> createComment(
             @PathVariable Long boardId,
             @Valid @RequestBody CreateCommentRequest request) {
-        Comment comment = createCommentService.createComment(boardId, request.getUserId(), request.getContent());
-        return ResponseEntity.status(201).body(comment);
+        createCommentService.createComment(boardId, request.getUserId(), request.getContent());
+        return ResponseEntity.ok().build();
     }
 }
