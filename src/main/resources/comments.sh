@@ -1,14 +1,17 @@
 #!/bin/bash
 
-# Define the API endpoint
-API_URL="http://localhost:8080/api/comments"
+# Define API endpoint variables
+API_URL="http://localhost:8080/api/boards/2/comments"
 
-# Define the JSON payload
+# Define the JSON payload variables
+USER_ID=1
+CONTENT="This is a sample comment"
+
+# Construct JSON payload
 JSON_PAYLOAD=$(cat <<EOF
 {
-  "boardId": 1,
-  "userId": 1,
-  "content": "This is a sample comment"
+  "userId": $USER_ID,
+  "content": "$CONTENT"
 }
 EOF
 )

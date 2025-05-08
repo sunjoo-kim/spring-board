@@ -11,10 +11,6 @@ import lombok.Setter;
 @Setter
 public class CreateCommentRequest {
 
-    @NotNull(message = "boardId는 필수입니다.")
-    @Positive(message = "boardId는 양수여야 합니다.")
-    private Long boardId;     // 댓글이 달릴 게시글 ID
-
     @NotNull(message = "userId는 필수입니다.")
     @Positive(message = "userId는 양수여야 합니다.")
     private Long userId; // 댓글 작성자 ID
