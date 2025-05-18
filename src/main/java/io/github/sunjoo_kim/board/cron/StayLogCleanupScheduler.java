@@ -12,8 +12,7 @@ public class StayLogCleanupScheduler {
     private final BoardStayTimeRecorder boardStayTimeRecorder;
 
     // 1시간마다 실행 (매시 0분 0초)
-//    @Scheduled(cron = "0 */3 * * * *")
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void scheduleStayLogCleanup() {
         boardStayTimeRecorder.cleanUpOldStayLogs();
     }

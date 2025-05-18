@@ -37,10 +37,8 @@ public class BoardStayTimeRecorder {
     public void cleanUpOldStayLogs() {
         long now = Instant.now().getEpochSecond();
         // (1) 1시간, 12시간 넘은 체류 기록 정리
-//        cleanUpLogs("board:staytime:log", "board:staytime:sum_1h", now - 3600); // 1시간
-//        cleanUpLogs("board:staytime:log", "board:staytime:sum_12h", now - 43200); // 12시간
-        cleanUpLogs("board:staytime:log1", "board:staytime:sum1", now - 180 , true ); // 1시간
-        cleanUpLogs("board:staytime:log12", "board:staytime:sum12", now - 240, true); // 12시간
+        cleanUpLogs("board:staytime:log1", "board:staytime:sum1", now - 3600 , true ); // 1시간
+        cleanUpLogs("board:staytime:log12", "board:staytime:sum12", now - 43200, true); // 12시간
     }
 
     private void cleanUpLogs(String logKey, String sumKey, long expireBefore,boolean deleteLog) {
