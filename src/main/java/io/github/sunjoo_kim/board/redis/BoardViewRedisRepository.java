@@ -1,29 +1,22 @@
 package io.github.sunjoo_kim.board.redis;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
-
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class BoardViewRedisRepository {
 
     private final RedisTemplate<String, Long> redisTemplate;
 
-    public void incrementViewCount(String key) {
-        redisTemplate.opsForValue().increment(key);
+    public Long getStayTime(String key,Long member) {
+       //  zset 에서 key에 해당하는 값을 Redis에서 가져옵니다.
+        log.info("key: {}, member: {}", key, member);
+        Double score = redisTemplate.opsForZSet().score(key, member);
+        return (score != null) ? score.longValue() : 0L;
     }
 
-    public Long getViewCount(String key) {
-        return redisTemplate.opsForValue().get(key);
-    }
-
-    public void setViewCount(String key, Long value) {
-        redisTemplate.opsForValue().set(key, value);
-    }
-    public Set<String> getKeys(String pattern) {
-        return redisTemplate.keys(pattern);
-    }
 }

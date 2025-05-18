@@ -24,11 +24,16 @@ CREATE TABLE IF NOT EXISTS boards (
 INSERT INTO users (username, password, email)
 VALUES
     ('john_doe', 'password123', 'john.doe@example.com'),
-    ('jane_smith', 'password456', 'jane.smith@example.com');
+    ('jane_smith', 'password456', 'jane.smith@example.com'),
+    ('daisy', 'password789', 'daisy@example.com');
 
 -- Board 테이블에 테스트 데이터 추가
 INSERT INTO boards (title, content, author_id, created_at, updated_at,view_count)
 VALUES
     ('첫 번째 게시물', '첫 번째 게시물 내용입니다.', 1,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
-    ('두 번째 게시물', '두 번째 게시물 내용입니다.', 2,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);
+    ('두 번째 게시물', '두 번째 게시물 내용입니다.', 2,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    ('세 번째 게시물', '세 번째 게시물 내용입니다.', 3,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    ('네 번째 게시물', '네 번째 게시물 내용입니다.', 1,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    ('다섯 번째 게시물', '다섯 번째 게시물 내용입니다.', 2,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    ('여섯 번째 게시물', '여섯 번째 게시물 내용입니다.', 3,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);
 

@@ -1,9 +1,7 @@
 package io.github.sunjoo_kim.board.redis;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -15,43 +13,53 @@ public class BoardStayTimeRecorder {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    public void recordStay(Long boradId, Long userId, long staySeconds) {
+    public void recordStay(Long boardId, Long userId, long staySeconds) {
+
         long now = Instant.now().getEpochSecond();
 
-        String logKey = "board:staytime:log";
-        String sumKey = "board:staytime:sum";
+        String logKey1 = "board:staytime:log1";
+        String logKey12 = "board:staytime:log12";
+        String sumKey1 = "board:staytime:sum1";
+        String sumKey12 = "board:staytime:sum12";
 
         // (1) 체류 기록 저장 (timestamp 기준)
-        String member = boradId + ":" + userId;
-        redisTemplate.opsForZSet().add(logKey, member, now);
+        String member = boardId + ":" + userId + ":" + staySeconds;
+        redisTemplate.opsForZSet().add(logKey1, member, now);
+        redisTemplate.opsForZSet().add(logKey12, member, now);
 
-        // (2) 총 체류시간 업데이트
-        redisTemplate.opsForZSet().incrementScore(sumKey, boradId.toString(), staySeconds);
+        // (2) 각 시간대 총 체류시간 업데이트
+        redisTemplate.opsForZSet().incrementScore(sumKey1, boardId.toString(), staySeconds);
+        redisTemplate.opsForZSet().incrementScore(sumKey12, boardId.toString(), staySeconds);
+
+
     }
 
     public void cleanUpOldStayLogs() {
         long now = Instant.now().getEpochSecond();
-        long expireBefore = now - (24 * 60 * 60);
+        // (1) 1시간, 12시간 넘은 체류 기록 정리
+//        cleanUpLogs("board:staytime:log", "board:staytime:sum_1h", now - 3600); // 1시간
+//        cleanUpLogs("board:staytime:log", "board:staytime:sum_12h", now - 43200); // 12시간
+        cleanUpLogs("board:staytime:log1", "board:staytime:sum1", now - 180 , true ); // 1시간
+        cleanUpLogs("board:staytime:log12", "board:staytime:sum12", now - 240, true); // 12시간
+    }
 
-        String logKey = "board:staytime:log";
-        String sumKey = "board:staytime:sum";
-
-        // (1) 24시간 넘은 체류 기록 조회
-        Set<String> expiredLogs = redisTemplate.opsForZSet()
-                .rangeByScore(logKey, 0, expireBefore);
+    private void cleanUpLogs(String logKey, String sumKey, long expireBefore,boolean deleteLog) {
+        Set<String> expiredLogs = redisTemplate.opsForZSet().rangeByScore(logKey, 0, expireBefore);
 
         if (expiredLogs != null) {
             for (String member : expiredLogs) {
                 String[] parts = member.split(":");
                 String boardId = parts[0];
+                long staySeconds = Long.parseLong(parts[2]);
 
-                // (2) 이 게시글 체류시간에서 적당량 차감 (대략적인 값, or 기록 따로 저장하면 정확 가능)
-                // 여기서는 예시로 그냥 고정 차감 (staySeconds 기록 필요)
-
-                redisTemplate.opsForZSet().incrementScore(sumKey, boardId, -30); // 30초 감소 예시
+                // (2) 체류시간 차감
+                redisTemplate.opsForZSet().incrementScore(sumKey, boardId, -staySeconds);
 
                 // (3) 로그 삭제
-                redisTemplate.opsForZSet().remove(logKey, member);
+                if (deleteLog) {
+                    redisTemplate.opsForZSet().remove(logKey, member);
+                }
+
             }
         }
     }

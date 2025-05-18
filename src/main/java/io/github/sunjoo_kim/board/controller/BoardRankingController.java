@@ -1,5 +1,6 @@
 package io.github.sunjoo_kim.board.controller;
 
+import io.github.sunjoo_kim.board.dto.BoardDTO;
 import io.github.sunjoo_kim.board.entity.Board;
 import io.github.sunjoo_kim.board.service.BoardRankingService;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,8 @@ public class BoardRankingController {
     }
 
     @GetMapping("/top5")
-    public ResponseEntity<List<Board>> getTop5Boards(){
-        List<Board> top5Boards = boardRankingService.getTop5Boards();
+    public ResponseEntity<List<BoardDTO>> getTop5Boards(){
+        List<BoardDTO> top5Boards = boardRankingService.getTop5Boards();
         return ResponseEntity.ok(top5Boards);
     }
 }

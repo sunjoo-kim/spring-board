@@ -31,7 +31,7 @@ public class Board {
 
     private LocalDateTime updatedAt;
 
-    @JoinColumn(name = "view_count")
+    @Column(name = "view_count")
     private Long viewCount;
 
     @PrePersist
