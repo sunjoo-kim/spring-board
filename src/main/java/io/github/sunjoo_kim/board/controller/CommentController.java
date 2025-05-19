@@ -1,7 +1,6 @@
 package io.github.sunjoo_kim.board.controller;
 
 import io.github.sunjoo_kim.board.dto.CreateCommentRequest;
-import io.github.sunjoo_kim.board.entity.Comment;
 import io.github.sunjoo_kim.board.service.CreateCommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
