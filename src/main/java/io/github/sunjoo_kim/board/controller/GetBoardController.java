@@ -16,7 +16,6 @@ import java.util.List;
 @Slf4j
 public class GetBoardController {
     private final GetBoardService getBoardService;
-    private final ViewEndService viewEndService;
 
     @PostMapping("/detail")
     public ResponseEntity<BoardResponse> getBoardById(@RequestBody GetBoardRequest request) {
@@ -32,13 +31,6 @@ public class GetBoardController {
                 .toList();
         return ResponseEntity.ok(responses);
     }
-    @PostMapping("/view-end")
-    public ResponseEntity<Void> viewEnd(@RequestBody BoardViewEndRequest request) {
-        log.debug("게시글 조회 종료 요청: boardId={}, userId={}", request.getId(), request.getUserId());
-        viewEndService.publishViewEndTimeEvent(request.getId(), request.getUserId());
-        return ResponseEntity.ok().build();
-    }
-
 
     private BoardResponse convertToResponse(Board board) {
         return new BoardResponse(
